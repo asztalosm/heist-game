@@ -1,0 +1,1 @@
+addons folder is in gitignore due to hackatime. make sure to add godotsteam to the addons folder
