@@ -11,10 +11,26 @@ config_version=5
 [application]
 
 config/name="heist-game"
+run/main_scene="uid://kjo1kve1wxec"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[debug]
+
+file_logging/enable_file_logging=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
 
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+
+[steam]
+
+initialization/app_id=480
+initialization/initialize_on_startup=true
+initialization/embed_callbacks=true
+multiplayer_peer/max_channels=4
