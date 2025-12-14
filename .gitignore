@@ -1,0 +1,10 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+/addons/
+/.git/
+*.aseprite
+*.tmp
+/exports
+.editorconfig
+*.aup3
