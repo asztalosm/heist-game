@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://b2h5a4ejftj3c"]
+
+[ext_resource type="Script" uid="uid://c4bxgpkbrj0p4" path="res://scripts/playScenes/lobby.gd" id="1_gmn1o"]
+
+[node name="Lobby" type="Node2D"]
+script = ExtResource("1_gmn1o")
+
+[node name="createLobby" type="Button" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 200.0
+offset_bottom = 88.0
+text = "Create Lobby"
+
+[node name="Button2" type="Button" parent="."]
+offset_left = 16.0
+offset_top = 96.0
+offset_right = 200.0
+offset_bottom = 168.0
+text = "Join Lobby"
+
+[node name="leaveLobby" type="Button" parent="."]
+offset_left = 16.0
+offset_top = 544.0
+offset_right = 200.0
+offset_bottom = 616.0
+text = "Exit Lobby"
+
+[connection signal="pressed" from="leaveLobby" to="." method="_on_leave_lobby_pressed"]
