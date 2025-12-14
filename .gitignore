@@ -1,7 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
-/addons/
+/addons/godot_super-wakatime/
 /.git/
 *.aseprite
 *.tmp
