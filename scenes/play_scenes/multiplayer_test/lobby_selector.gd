@@ -2,73 +2,74 @@ extends Node2D
 
 var lobby_id = 0
 var peer = SteamMultiplayerPeer.new()
+var host_id = 0
 
 func _ready():
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_joined.connect(_on_lobby_joined)
-	Steam.avatar_loaded.connect(_on_loaded_avatar)
-
-func spawn(data):
-	var a = (load(data) as PackedScene).instantiate()
-	return a
+	Steam.lobby_chat_update.connect(_on_lobby_chat_update)
 
 func _on_button_pressed():
 	Steam.createLobby(Steam.LOBBY_TYPE_PUBLIC)
 
-
 func _on_lobby_created(success, id):
 	if not success:
-		print("baj van")
 		return
 
 	lobby_id = id
-	print(lobby_id)
+	host_id = Steam.getSteamID()
+	
 
 	Steam.setLobbyData(lobby_id, "name", Steam.getPersonaName() + "'s lobby")
 	Steam.setLobbyJoinable(lobby_id, true)
 
-	peer.create_host()
+	peer.create_host(0)
 	multiplayer.multiplayer_peer = peer
+
+	Steam.acceptP2PSessionWithUser(host_id)
 	
-	var label = Label.new()
-	label.text = "lobby id: " + str(lobby_id)
-	label.position = Vector2(1680, 0)
-	add_child(label)
+	Steam.setLobbyMemberData(lobby_id, "ready", "0")
+
+	print(lobby_id)
 
 func _on_lobby_joined(lobby_id, steam_id, connect_result, is_friend):
-	print("ebbe a lobbyBA LEPTEL: ", lobby_id)
-	multiplayer.multiplayer_peer = peer
-	_display_lobby_members(lobby_id)
+	host_id = Steam.getLobbyOwner(lobby_id)
+
+	if Steam.getSteamID() != host_id:
+		peer.create_client(host_id)
+		multiplayer.multiplayer_peer = peer
+
+	var num_of_players = Steam.getNumLobbyMembers(lobby_id)
+	for i in range(num_of_players):
+		var sid = Steam.getLobbyMemberByIndex(lobby_id, i)
+		Steam.acceptP2PSessionWithUser(sid)
+
 	$CreateLobby.hide()
 	$JoinLobby.hide()
 	$TextEdit.hide()
-
+	print(lobby_id)
+	_update_player_names(lobby_id)
 	
-func _on_join_lobby_pressed() -> void:
+
+
+func _update_player_names(lobby_id):
+	var num = Steam.getNumLobbyMembers(lobby_id)
+	var names = []
+
+	for i in range(num):
+		var sid = Steam.getLobbyMemberByIndex(lobby_id, i)
+		var name = Steam.getFriendPersonaName(sid)
+		names.append(name)
+
+	if names.size() > 0:
+		$P1Name.text = names[0]
+	if names.size() > 1:
+		$P2Name.text = names[1]
+
+func _on_join_lobby_pressed():
 	var id_to_join = int($TextEdit.text.strip_edges())
 	Steam.joinLobby(id_to_join)
 
-func _display_lobby_members(lobby_id):
-	var num_of_players = Steam.getNumLobbyMembers(lobby_id)
-	print("ENNYI MEMBER VAN:", num_of_players)
 
-	for i in range(num_of_players):
-		var steam_id = Steam.getLobbyMemberByIndex(lobby_id, i)
-		var username = Steam.getFriendPersonaName(steam_id)
-		print("ember ", i, ":", username)
-		Steam.getPlayerAvatar(steam_id)
-
-
-#STEAM AVATAROKNAK A BETOLTESE
-func _on_loaded_avatar(user_id: int, avatar_size: int, avatar_buffer:PackedByteArray) -> void:
-
-	var avatar_image: Image = Image.create_from_data(avatar_size, avatar_size, false, Image.FORMAT_RGBA8, avatar_buffer)
-
-	var avatar_texture: ImageTexture = ImageTexture.create_from_image(avatar_image)
-
-	if $P1.texture == null:
-		$P1.texture = avatar_texture
-		$P1Name.text = Steam.getPersonaName()
-	else:
-		$P2.texture = avatar_texture
-		$P2Name.text = Steam.getPersonaName()
+func _on_lobby_chat_update(lobby_id, changed_id, making_change_id, chat_state):
+	_update_player_names(lobby_id)
