@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://ckuc2r63l1roh"]
+
+[ext_resource type="Script" uid="uid://ddfqek56c1hdo" path="res://scenes/play_scenes/multiplayer_test/lobby_selector.gd" id="1_hug5a"]
+
+[node name="MainScene" type="Node2D"]
+script = ExtResource("1_hug5a")
+
+[node name="CreateLobby" type="Button" parent="."]
+offset_right = 272.0
+offset_bottom = 96.0
+theme_override_font_sizes/font_size = 32
+text = "CREATE LOBBY"
+
+[node name="JoinLobby" type="Button" parent="."]
+offset_top = 104.0
+offset_right = 272.0
+offset_bottom = 200.0
+theme_override_font_sizes/font_size = 32
+text = "JOIN LOBBY"
+
+[node name="TextEdit" type="TextEdit" parent="."]
+offset_left = 280.0
+offset_top = 104.0
+offset_right = 616.0
+offset_bottom = 200.0
+placeholder_text = "ENTER LOBBY ID HERE"
+
+[connection signal="pressed" from="CreateLobby" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="JoinLobby" to="." method="_on_join_lobby_pressed"]
