@@ -1,75 +1,119 @@
 extends Node2D
 
 var lobby_id = 0
-var peer = SteamMultiplayerPeer.new()
 var host_id = 0
+var max_members = 2
+var lobby_members = []
+var steam_id
+var steam_username
+const PACKET_READ_LIMIT = 32
+var is_host
 
 func _ready():
+	print("STEAM INIT:", Steam.isSteamRunning()) 
+	print("APPID:", Steam.getAppID())
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_joined.connect(_on_lobby_joined)
-	Steam.lobby_chat_update.connect(_on_lobby_chat_update)
+	Steam.p2p_session_request.connect(_on_p2p_session_request)
+	steam_id = Steam.getSteamID()
+	steam_username = Steam.getPersonaName()
+
+func _process(delta):
+	if lobby_id > 0:
+		read_all_p2p_packets()
 
 func _on_button_pressed():
-	Steam.createLobby(Steam.LOBBY_TYPE_PUBLIC)
+	if lobby_id == 0:
+		is_host = true
+		Steam.createLobby(Steam.LOBBY_TYPE_PUBLIC, max_members)
 
 func _on_lobby_created(success, id):
 	if not success:
 		return
-
-	lobby_id = id
-	host_id = Steam.getSteamID()
 	
+	lobby_id = id
 
 	Steam.setLobbyData(lobby_id, "name", Steam.getPersonaName() + "'s lobby")
 	Steam.setLobbyJoinable(lobby_id, true)
+	Steam.allowP2PPacketRelay(true)
 
-	peer.create_host(0)
-	multiplayer.multiplayer_peer = peer
-
-	Steam.acceptP2PSessionWithUser(host_id)
-	
 	Steam.setLobbyMemberData(lobby_id, "ready", "0")
-
 	print(lobby_id)
 
-func _on_lobby_joined(lobby_id, steam_id, connect_result, is_friend):
-	host_id = Steam.getLobbyOwner(lobby_id)
+func _on_lobby_joined(lobby_id: int, result: int):
+	if result == Steam.CHAT_ROOM_ENTER_RESPONSE_SUCCESS:
+		print("siker")
 
-	if Steam.getSteamID() != host_id:
-		peer.create_client(host_id)
-		multiplayer.multiplayer_peer = peer
+		self.lobby_id = lobby_id
+		get_lobby_members()
+		make_p2p_handshake()
 
-	var num_of_players = Steam.getNumLobbyMembers(lobby_id)
-	for i in range(num_of_players):
-		var sid = Steam.getLobbyMemberByIndex(lobby_id, i)
-		Steam.acceptP2PSessionWithUser(sid)
+		print(lobby_members)
 
-	$CreateLobby.hide()
-	$JoinLobby.hide()
-	$TextEdit.hide()
-	print(lobby_id)
-	_update_player_names(lobby_id)
-	
+		if Steam.getLobbyOwner(lobby_id) == steam_id:
+			$P1Name.text = "owner"
+		else:
+			if lobby_members.size() > 1:
+				$P2Name.text = lobby_members[1]["steam_name"]
 
+		$CreateLobby.hide()
+		$JoinLobby.hide()
+		$TextEdit.hide()
 
-func _update_player_names(lobby_id):
-	var num = Steam.getNumLobbyMembers(lobby_id)
-	var names = []
+		print(lobby_id)
 
-	for i in range(num):
-		var sid = Steam.getLobbyMemberByIndex(lobby_id, i)
-		var name = Steam.getFriendPersonaName(sid)
-		names.append(name)
-
-	if names.size() > 0:
-		$P1Name.text = names[0]
-	if names.size() > 1:
-		$P2Name.text = names[1]
 
 func _on_join_lobby_pressed():
 	var id_to_join = int($TextEdit.text.strip_edges())
 	Steam.joinLobby(id_to_join)
+	
+func get_lobby_members():
+	lobby_members.clear()
+	var num = Steam.getNumLobbyMembers(lobby_id)
 
+	for member in range(num):
+		var id = Steam.getLobbyMemberByIndex(lobby_id, member)
+		var name = Steam.getFriendPersonaName(id)
+		lobby_members.append({"steam_id": id, "steam_name": name})
 
-func _on_lobby_chat_update(lobby_id, changed_id, making_change_id, chat_state):
-	_update_player_names(lobby_id)
+func send_p2p_packet(this_target: int, packet_data: Dictionary, send_type: int = 0):
+	var channel = 0
+	var this_data: PackedByteArray
+	this_data.append_array(var_to_bytes(packet_data))
+
+	if this_target == 0:
+		if lobby_members.size() > 1:
+			for member in lobby_members:
+				if member["steam_id"] != steam_id:
+					Steam.sendP2PPacket(member["steam_id"], this_data, send_type, channel)
+	else:
+		Steam.sendP2PPacket(this_target, this_data, send_type, channel)
+
+func _on_p2p_session_request(remote_id):
+	Steam.acceptP2PSessionWithUser(remote_id)
+
+func make_p2p_handshake():
+	send_p2p_packet(0, {"message": "handshake", "steam_id": steam_id, "username": steam_username})
+
+func read_all_p2p_packets(read_count = 0):
+	if read_count >= PACKET_READ_LIMIT:
+		return
+
+	if Steam.getAvailableP2PPacketSize(0) > 0:
+		read_p2p_packet()
+		read_all_p2p_packets(read_count + 1)
+
+func read_p2p_packet():
+	var packet_size = Steam.getAvailableP2PPacketSize(0)
+
+	if packet_size > 0:
+		var this_packet: Dictionary = Steam.readP2PPacket(packet_size, 0)
+		var packet_sender: int = this_packet["remote_steam_id"]
+		var packet_code: PackedByteArray = this_packet["data"]
+		var readable_data: Dictionary = bytes_to_var(packet_code)
+
+		if readable_data.has("message"):
+			match readable_data["message"]:
+				"handshake":
+					print("PLAYER: ", readable_data["username"], "HAS JOINED")
+					get_lobby_members()
