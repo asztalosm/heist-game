@@ -1,6 +1,6 @@
 extends Node2D
 
-var lobby_id = 0
+var lobby_id = null
 var host_id = 0
 var max_members = 2
 var lobby_members = []
@@ -20,24 +20,26 @@ func _ready():
 	steam_username = Steam.getPersonaName()
 
 func _process(delta):
-	if lobby_id > 0:
+	if lobby_id != null:
 		read_all_p2p_packets()
 
-func _on_button_pressed():
+func _create_lobby() -> void:
 	if lobby_id == 0:
 		is_host = true
 		Steam.createLobby(Steam.LOBBY_TYPE_PUBLIC, max_members)
 
+func _on_join_lobby_pressed():
+	var id_to_join = int($TextEdit.text.strip_edges())
+	Steam.joinLobby(id_to_join)
+
 func _on_lobby_created(success, id):
 	if not success:
 		return
-	
-	lobby_id = id
 
+	lobby_id = id
 	Steam.setLobbyData(lobby_id, "name", Steam.getPersonaName() + "'s lobby")
 	Steam.setLobbyJoinable(lobby_id, true)
 	Steam.allowP2PPacketRelay(true)
-
 	Steam.setLobbyMemberData(lobby_id, "ready", "0")
 	print(lobby_id)
 
@@ -73,14 +75,10 @@ func _on_lobby_joined(_lobby_id: int, _permission: int, _locked: bool, response:
 			Steam.CHAT_ROOM_ENTER_RESPONSE_YOU_BLOCKED_MEMBER: fail_reason = "A user you have blocked is in the lobby."
 
 
-func _on_join_lobby_pressed():
-	var id_to_join = int($TextEdit.text.strip_edges())
-	Steam.joinLobby(id_to_join)
-	
 func get_lobby_members():
 	lobby_members.clear()
 	var num = Steam.getNumLobbyMembers(lobby_id)
-
+	print("number of players in lobby: ", num)
 	for member in range(num):
 		var id = Steam.getLobbyMemberByIndex(lobby_id, member)
 		var name = Steam.getFriendPersonaName(id)
