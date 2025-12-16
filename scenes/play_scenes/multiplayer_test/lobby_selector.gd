@@ -9,6 +9,7 @@ var steam_username
 const PACKET_READ_LIMIT = 32
 var is_host
 
+
 func _ready():
 	print("STEAM INIT:", Steam.isSteamRunning()) 
 	print("APPID:", Steam.getAppID())
@@ -40,27 +41,36 @@ func _on_lobby_created(success, id):
 	Steam.setLobbyMemberData(lobby_id, "ready", "0")
 	print(lobby_id)
 
-func _on_lobby_joined(lobby_id: int, result: int):
-	if result == Steam.CHAT_ROOM_ENTER_RESPONSE_SUCCESS:
+func _on_lobby_joined(_lobby_id: int, _permission: int, _locked: bool, response: int):
+	if response == Steam.CHAT_ROOM_ENTER_RESPONSE_SUCCESS:
 		print("siker")
-
 		self.lobby_id = lobby_id
 		get_lobby_members()
 		make_p2p_handshake()
-
 		print(lobby_members)
-
 		if Steam.getLobbyOwner(lobby_id) == steam_id:
-			$P1Name.text = "owner"
+			$P1Name.text = "owner: " + Steam.getPersonaName()
 		else:
 			if lobby_members.size() > 1:
 				$P2Name.text = lobby_members[1]["steam_name"]
-
 		$CreateLobby.hide()
 		$JoinLobby.hide()
 		$TextEdit.hide()
-
 		print(lobby_id)
+	else:
+		# Get the failure reason
+		var fail_reason: String
+		match response:
+			Steam.CHAT_ROOM_ENTER_RESPONSE_DOESNT_EXIST: fail_reason = "This lobby no longer exists."
+			Steam.CHAT_ROOM_ENTER_RESPONSE_NOT_ALLOWED: fail_reason = "You don't have permission to join this lobby."
+			Steam.CHAT_ROOM_ENTER_RESPONSE_FULL: fail_reason = "The lobby is now full."
+			Steam.CHAT_ROOM_ENTER_RESPONSE_ERROR: fail_reason = "Uh... something unexpected happened!"
+			Steam.CHAT_ROOM_ENTER_RESPONSE_BANNED: fail_reason = "You are banned from this lobby."
+			Steam.CHAT_ROOM_ENTER_RESPONSE_LIMITED: fail_reason = "You cannot join due to having a limited account."
+			Steam.CHAT_ROOM_ENTER_RESPONSE_CLAN_DISABLED: fail_reason = "This lobby is locked or disabled."
+			Steam.CHAT_ROOM_ENTER_RESPONSE_COMMUNITY_BAN: fail_reason = "This lobby is community locked."
+			Steam.CHAT_ROOM_ENTER_RESPONSE_MEMBER_BLOCKED_YOU: fail_reason = "A user in the lobby has blocked you from joining."
+			Steam.CHAT_ROOM_ENTER_RESPONSE_YOU_BLOCKED_MEMBER: fail_reason = "A user you have blocked is in the lobby."
 
 
 func _on_join_lobby_pressed():
