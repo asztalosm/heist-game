@@ -11,13 +11,15 @@ config_version=5
 [application]
 
 config/name="heist-game"
-run/main_scene="uid://kjo1kve1wxec"
+run/main_scene="uid://dqw8ojndtnfur"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Steamworks="*res://scripts/autoload/steamworks.gd"
+GameController="*res://scenes/play_scenes/player/player_scripts/game_controller.gd"
+EventController="*res://scenes/play_scenes/player/player_scripts/event_controller.gd"
 
 [debug]
 

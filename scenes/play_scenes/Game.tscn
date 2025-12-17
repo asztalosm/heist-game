@@ -1,3 +1,49 @@
-[gd_scene load_steps=0 format=3 uid="uid://dqw8ojndtnfur"]
+[gd_scene load_steps=5 format=3 uid="uid://dqw8ojndtnfur"]
+
+[ext_resource type="Script" uid="uid://ccqhsllem52ki" path="res://scenes/play_scenes/collectables/cash/cash_scripts/cash_display.gd" id="1_dd6eb"]
+[ext_resource type="Texture2D" uid="uid://bis5lwu5yalci" path="res://icon.svg" id="2_55jmh"]
+[ext_resource type="PackedScene" uid="uid://jbbww5p2qifr" path="res://scenes/play_scenes/collectables/cash/cash.tscn" id="3_6isf2"]
+[ext_resource type="PackedScene" uid="uid://dy8mnquuvhpwr" path="res://scenes/play_scenes/player/player.tscn" id="4_jjcd2"]
 
 [node name="Game" type="Node2D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="CashDisplay" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 30.0
+offset_top = 30.0
+offset_right = 285.99994
+offset_bottom = 94.0
+script = ExtResource("1_dd6eb")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/CashDisplay"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("2_55jmh")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/CashDisplay"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 8.0
+offset_right = 256.0
+offset_bottom = 57.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 35
+text = "0"
+vertical_alignment = 1
+
+[node name="Player" parent="." instance=ExtResource("4_jjcd2")]
+position = Vector2(496, 264)
+
+[node name="Cash2" parent="." instance=ExtResource("3_6isf2")]
+position = Vector2(248, 376)
+
+[node name="Cash3" parent="." instance=ExtResource("3_6isf2")]
+position = Vector2(360, 112)
+
+[node name="Cash4" parent="." instance=ExtResource("3_6isf2")]
+position = Vector2(112, 208)
