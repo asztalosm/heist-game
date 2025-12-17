@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://kjo1kve1wxec"]
+[gd_scene load_steps=3 format=3 uid="uid://kjo1kve1wxec"]
 
 [ext_resource type="Script" uid="uid://bqcsdwqfmv82g" path="res://scripts/play_scenes/main_menu.gd" id="1_q2uwv"]
+[ext_resource type="Texture2D" uid="uid://2vwckeahgxr1" path="res://resources/textures/sprites/missing_player.png" id="2_2wn2b"]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_q2uwv")
@@ -32,6 +33,44 @@ text = "EXIT"
 [node name="TextureRect" type="TextureRect" parent="."]
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="Lobby" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Lobby"]
+layout_mode = 0
+offset_left = 679.0
+offset_top = 2.0
+offset_right = 772.0
+offset_bottom = 51.0
+text = "Lobby:"
+
+[node name="GridContainer" type="GridContainer" parent="Lobby"]
+layout_mode = 0
+offset_left = 740.0
+offset_top = 1.0
+offset_right = 780.0
+offset_bottom = 41.0
+columns = 4
+
+[node name="1" type="TextureRect" parent="Lobby/GridContainer"]
+layout_mode = 2
+texture = ExtResource("2_2wn2b")
+
+[node name="2" type="TextureRect" parent="Lobby/GridContainer"]
+layout_mode = 2
+texture = ExtResource("2_2wn2b")
+
+[node name="3" type="TextureRect" parent="Lobby/GridContainer"]
+layout_mode = 2
+texture = ExtResource("2_2wn2b")
+
+[node name="4" type="TextureRect" parent="Lobby/GridContainer"]
+layout_mode = 2
+texture = ExtResource("2_2wn2b")
 
 [connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="PlayButton2" to="." method="_on_play_button_2_pressed"]

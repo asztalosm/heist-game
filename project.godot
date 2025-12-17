@@ -27,9 +27,8 @@ file_logging/enable_file_logging=true
 
 [display]
 
-window/size/viewport_width=960
-window/size/viewport_height=540
 window/size/mode=3
+window/stretch/mode="viewport"
 
 [editor_plugins]
 
@@ -68,6 +67,6 @@ textures/vram_compression/import_etc2_astc=true
 [steam]
 
 initialization/app_id=480
-initialization/initialize_on_startup=true
+initialization/initialize_on_startup=false
 initialization/embed_callbacks=false
 multiplayer_peer/max_channels=4
