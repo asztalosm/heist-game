@@ -4,15 +4,18 @@
 [ext_resource type="Texture2D" uid="uid://bis5lwu5yalci" path="res://icon.svg" id="2_reknm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_obicw"]
-size = Vector2(125, 129)
+size = Vector2(32, 32)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_meayu")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(448, 248)
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_reknm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(449.5, 247.5)
 shape = SubResource("RectangleShape2D_obicw")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+position_smoothing_speed = 20.0

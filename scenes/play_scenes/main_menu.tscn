@@ -6,12 +6,20 @@
 script = ExtResource("1_q2uwv")
 
 [node name="PlayButton" type="Button" parent="."]
-offset_left = 288.0
-offset_top = 104.0
-offset_right = 864.0
-offset_bottom = 325.0
+offset_left = 80.0
+offset_top = 91.0
+offset_right = 504.0
+offset_bottom = 312.0
 theme_override_font_sizes/font_size = 156
-text = "PLAY"
+text = "game"
+
+[node name="PlayButton2" type="Button" parent="."]
+offset_left = 596.0
+offset_top = 161.0
+offset_right = 906.4706
+offset_bottom = 252.0
+theme_override_font_sizes/font_size = 60
+text = "lobby test"
 
 [node name="ExitButton" type="Button" parent="."]
 offset_left = 288.0
@@ -26,4 +34,5 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="PlayButton2" to="." method="_on_play_button_2_pressed"]
 [connection signal="pressed" from="ExitButton" to="." method="_on_exit_button_pressed"]

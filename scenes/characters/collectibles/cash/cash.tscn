@@ -1,17 +1,16 @@
 [gd_scene load_steps=4 format=3 uid="uid://jbbww5p2qifr"]
 
-[ext_resource type="Script" uid="uid://cnjqol6gsg1d2" path="res://scenes/play_scenes/collectables/cash/cash_scripts/cash.gd" id="1_8td3f"]
-[ext_resource type="Texture2D" uid="uid://bis5lwu5yalci" path="res://icon.svg" id="2_fj6f6"]
+[ext_resource type="Script" uid="uid://cnjqol6gsg1d2" path="res://scenes/characters/collectibles/cash/cash_scripts/cash.gd" id="1_8td3f"]
+[ext_resource type="Texture2D" uid="uid://d1t15rbd5fm50" path="res://resources/textures/sprites/cash.png" id="2_7vatg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qkmiw"]
-size = Vector2(39.5, 38)
+size = Vector2(24, 48)
 
 [node name="Cash" type="Node2D"]
 script = ExtResource("1_8td3f")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.28125, 0.3125)
-texture = ExtResource("2_fj6f6")
+texture = ExtResource("2_7vatg")
 
 [node name="Area2D" type="Area2D" parent="."]
 
