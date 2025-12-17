@@ -8,8 +8,6 @@ func _on_exit_button_pressed() -> void:
 
 func _successful_steam_connection() -> void:
 	#get players icon to use in the "lobby", lobby should be offline until player invites someone / someone requests to join
-	print(Steamworks.steam_image_texture)
-	print("a")
 	$"Lobby/GridContainer/1".texture = Steamworks.steam_image_texture
 
 func _on_play_button_2_pressed() -> void:

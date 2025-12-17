@@ -17,6 +17,7 @@ func _on_loaded_avatar(_user_id : int, avatar_size : int, avatar_buffer : Packed
 	avatar_image.resize(48, 48, Image.INTERPOLATE_LANCZOS)
 	steam_image_texture = ImageTexture.create_from_image(avatar_image)
 	menu_scene._successful_steam_connection()
+
 #this is like really bad code, because i should make a new scene for the lobby but ill do that once this works
 func _process(_delta: float) -> void:
 	Steam.run_callbacks()
