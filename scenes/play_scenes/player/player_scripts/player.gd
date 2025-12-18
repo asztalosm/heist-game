@@ -1,5 +1,6 @@
 class_name Player extends CharacterBody2D
 
+@onready var player = $"."
 const SPEED = 300
 
 func _physics_process(delta: float) -> void:
@@ -11,3 +12,4 @@ func _physics_process(delta: float) -> void:
 		velocity.y = move_toward(velocity.y, 0, SPEED)
 	rotate(get_angle_to(get_global_mouse_position()) + 0.5 * PI)
 	move_and_slide()
+	
