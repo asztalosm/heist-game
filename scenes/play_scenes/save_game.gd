@@ -4,20 +4,25 @@ extends Button
 @onready var label = $"../CashDisplay/Label"
 @onready var player = $"../../Player"
 
-var config = ConfigFile.new()
+var config := ConfigFile.new()
 
 func save():
-	config.set_value("cash", "value", game_controller.player_cash)
-	config.set_value("position_x", "coordinates", player.position.x)
-	config.set_value("position_y", "coordinates", player.position.y)
-	config.save("user://savegame.cfg")
+	config.set_value("cash", "value", Marshalls.utf8_to_base64(str(game_controller.player_cash)))
+	config.set_value("position_x", "coordinates", Marshalls.utf8_to_base64(str(player.position.x)))
+	config.set_value("position_y", "coordinates", Marshalls.utf8_to_base64(str(player.position.y)))
+	config.save("res://savegame.cfg")
+
 
 func load_save():
-	var game_save = config.load("user://savegame.cfg")
-	if game_save == OK:
-		game_controller.player_cash = config.get_value("cash", "value", 0)
-		label.text = str(game_controller.player_cash)
+	if config.load("res://savegame.cfg") != OK:
+		return
 
-		var x = config.get_value("position_x", "coordinates", 0)
-		var y = config.get_value("position_y", "coordinates", 0)
-		player.position = Vector2(x, y)
+	var cash_b64 = config.get_value("cash", "value", "")
+	var x_b64 = config.get_value("position_x", "coordinates", "")
+	var y_b64 = config.get_value("position_y", "coordinates", "")
+
+	game_controller.player_cash = int(Marshalls.base64_to_utf8(cash_b64))
+
+	label.text = str(game_controller.player_cash)
+
+	player.position = Vector2(float(Marshalls.base64_to_utf8(x_b64)), float(Marshalls.base64_to_utf8(y_b64)))
