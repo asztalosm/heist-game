@@ -3,7 +3,6 @@
 /android/
 /addons/godot_super-wakatime/
 /.git/
-*.aseprite
 *.tmp
 /exports
 .editorconfig
