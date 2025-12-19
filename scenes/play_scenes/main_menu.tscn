@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://kjo1kve1wxec"]
 
-[ext_resource type="Script" uid="uid://bqcsdwqfmv82g" path="res://scripts/play_scenes/main_menu.gd" id="1_q2uwv"]
+[ext_resource type="Script" uid="uid://bqcsdwqfmv82g" path="res://scripts/scene_scripts/main_menu.gd" id="1_q2uwv"]
 [ext_resource type="Texture2D" uid="uid://2vwckeahgxr1" path="res://resources/textures/sprites/missing_player.png" id="2_2wn2b"]
 
 [node name="MainMenu" type="Node2D"]
