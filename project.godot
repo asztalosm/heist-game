@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 Steamworks="*res://scripts/autoload/steamworks.gd"
 GameController="*res://scenes/play_scenes/player/player_scripts/game_controller.gd"
 EventController="*res://scenes/play_scenes/player/player_scripts/event_controller.gd"
+SteamLobbyFunctions="*res://scripts/autoload/steam_lobby_functions.gd"
 
 [debug]
 
