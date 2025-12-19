@@ -72,6 +72,14 @@ texture = ExtResource("2_2wn2b")
 layout_mode = 2
 texture = ExtResource("2_2wn2b")
 
+[node name="Button" type="Button" parent="."]
+offset_left = 693.0
+offset_top = 70.0
+offset_right = 797.0
+offset_bottom = 101.0
+text = "create lobby"
+
 [connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="PlayButton2" to="." method="_on_play_button_2_pressed"]
 [connection signal="pressed" from="ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="Button" to="." method="_on_create_lobby"]

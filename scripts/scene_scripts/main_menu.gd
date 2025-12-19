@@ -17,3 +17,9 @@ func _on_play_button_2_pressed() -> void:
 
 func _no_steam_connection() -> void:
 	$Lobby.queue_free()
+
+func refresh_lobby_data() -> void:
+	print(Steamworks.lobby_data)
+
+func _on_create_lobby() -> void:
+	Steamworks.create_lobby()
