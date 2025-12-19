@@ -28,8 +28,8 @@ func check_command_line() -> void:
 				join_lobby(int(these_arguments[1]))
 
 #region built in lobby signals
-func _on_lobby_created(connect: int, this_lobby_id: int) -> void:
-	if connect == 1:
+func _on_lobby_created(this_connect: int, this_lobby_id: int) -> void:
+	if this_connect == 1:
 		lobby_id = this_lobby_id
 		print("Created lobby: ", lobby_id)
 		Steam.setLobbyJoinable(lobby_id, true) # should be done by default, its here just in case
@@ -38,14 +38,14 @@ func _on_lobby_created(connect: int, this_lobby_id: int) -> void:
 		var set_relay: bool = Steam.allowP2PPacketRelay(true) #allow p2p fallback through steam if needed
 		print("Allowing Steam to be relay backup: %s" % set_relay)
 
-func _on_lobby_chat_update() -> void:
+func _on_lobby_chat_update(_this_lobby_id: int, ) -> void:
 	print("chat update")
 
 func _on_lobby_join_requested(this_lobby_id: int, friend_id: int) -> void:
 	var owner_name = Steam.getFriendPersonaName(friend_id)
 	print("joining %s's lobby" % owner_name)
 	join_lobby(this_lobby_id)
-func _on_lobby_data_update(success: int, lobby_id: int, member_id: int) -> void:
+func _on_lobby_data_update(_success: int, _lobby_id: int, _member_id: int) -> void:
 	print("lobby data updated")
 
 func _on_lobby_invite() -> void:
@@ -102,7 +102,7 @@ func get_lobby_members() -> void:
 
 func make_p2p_handshake() -> void:
 	print("Sending P2P handshake to lobby")
-	Steam.sendP2PPacket(steam_id, var_to_bytes("test"), Steam.P2P_SEND_RELIABLE)
+	Steam.sendP2PPacket(lobby_id, var_to_bytes("test"), Steam.P2P_SEND_RELIABLE)
 	#send_p2p_packet(0, {"message": "handshake", "from": steam_id})
 
 func send_p2p_packet(this_steam_id: int, data: PackedByteArray, send_type: int = Steam.P2P_SEND_RELIABLE, channel: int = 0):
@@ -128,7 +128,7 @@ func set_user_variables() -> void:
 	steam_initialized = true
 	
 	Steam.join_requested.connect(_on_lobby_join_requested)
-	Steam.lobby_chat_update.connect(_on_lobby_chat_update)
+	#Steam.lobby_chat_update.connect(_on_lobby_chat_update)
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_data_update.connect(_on_lobby_data_update)
 	Steam.lobby_invite.connect(_on_lobby_invite)
