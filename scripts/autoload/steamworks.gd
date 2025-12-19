@@ -78,7 +78,15 @@ func _on_lobby_message() -> void:
 func _on_persona_change(this_steam_id: int, _flag: int) -> void:
 	if lobby_id > 0:
 		print("A user (%s) had information change, update the lobby list" % this_steam_id)
+		print(_flag)
 		get_lobby_members()
+
+func _on_p2p_session_request(remote_steam_id: int) -> void:
+	print("p2p session request: ", remote_steam_id)
+
+func _on_p2p_session_connect_fail(remote_steam_id: int, session_error: int) -> void:
+	print("fasz", remote_steam_id, session_error)
+
 #endregion
 
 #region other lobby functions
@@ -100,6 +108,24 @@ func get_lobby_members() -> void:
 		var member_steam_name = Steam.getFriendPersonaName(member_steam_id)
 		lobby_members.append({"steam_id": member_steam_id, "steam_name": member_steam_name})
 
+func read_p2p_packet() -> void:
+	var packet_size: int = Steam.getAvailableP2PPacketSize(0)
+	if packet_size > 0:
+		var this_packet: Dictionary = Steam.readP2PPacket(packet_size, 0)
+		if this_packet.is_empty() or this_packet == null:
+			print("WARNING: read an empty packet with non-zero size!")
+		var packet_sender: int = this_packet['remote_steam_id']
+		var packet_code : PackedByteArray = this_packet['data']
+		var readable_data: Dictionary = bytes_to_var(packet_code)
+		print("Packets: %s, \n\npacket sender: %s" % readable_data, packet_sender)
+
+func read_all_p2p_packets(read_count: int = 0):
+	if read_count >= PACKET_READ_LIMIT:
+		return
+	if Steam.getAvailableP2PPacketSize(0) > 0:
+		read_p2p_packet()
+		read_all_p2p_packets(read_count + 1)
+
 func make_p2p_handshake() -> void:
 	print("Sending P2P handshake to lobby")
 	Steam.sendP2PPacket(lobby_id, var_to_bytes("test"), Steam.P2P_SEND_RELIABLE)
@@ -119,6 +145,8 @@ func _on_loaded_avatar(_user_id : int, avatar_size : int, avatar_buffer : Packed
 #this is like really bad code, because i should make a new scene for the lobby but ill do that once this works
 func _process(_delta: float) -> void:
 	Steam.run_callbacks()
+	if lobby_id > 0:
+		read_all_p2p_packets()
 
 func set_user_variables() -> void:
 	steam_id = Steam.getSteamID()
@@ -129,12 +157,15 @@ func set_user_variables() -> void:
 	
 	Steam.join_requested.connect(_on_lobby_join_requested)
 	#Steam.lobby_chat_update.connect(_on_lobby_chat_update)
+	Steam.p2p_session_request.connect(_on_p2p_session_request)
+	Steam.p2p_session_connect_fail.connect(_on_p2p_session_connect_fail)
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_data_update.connect(_on_lobby_data_update)
 	Steam.lobby_invite.connect(_on_lobby_invite)
 	Steam.lobby_joined.connect(_on_lobby_joined)
 	Steam.lobby_message.connect(_on_lobby_message)
 	Steam.persona_state_change.connect(_on_persona_change)
+	Steam.readP2PPacket(0, Steam.P2P_SEND_RELIABLE)
 	check_command_line() #TODO scene path as argument
 
 
