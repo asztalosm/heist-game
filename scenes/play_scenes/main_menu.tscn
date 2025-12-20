@@ -80,11 +80,12 @@ offset_bottom = 101.0
 text = "create lobby"
 
 [node name="Button2" type="Button" parent="."]
+visible = false
 offset_left = 821.0
 offset_top = 70.0
 offset_right = 925.0
 offset_bottom = 101.0
-text = "print lobby data"
+text = "print lobby data - doesnt print anything anymore, is replaced by a lobby update function"
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true

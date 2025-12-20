@@ -21,7 +21,8 @@ func _on_create_lobby() -> void:
 
 
 func refresh_lobby() -> void:
-	print(await Steamworks.get_lobby_data(Steamworks.lobby_id))
-	for players in Steamworks.lobby_data:
-		$Lobby/GridContainer.get_node(str(players.number)).texture = players.steam_image_texture
-		$Lobby/GridContainer.get_node(str(players.number)).tooltip_text = players.steam_username
+	if Steamworks.change_detected:
+		for players in Steamworks.lobby_data:
+			$Lobby/GridContainer.get_node(str(players.number)).texture = players.steam_image_texture
+			$Lobby/GridContainer.get_node(str(players.number)).tooltip_text = players.steam_username
+		Steamworks.change_detected = false
