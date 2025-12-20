@@ -17,7 +17,12 @@ func _process(_delta: float) -> void:
 
 func _on_lobby_joined(lobby: int, _permissions: int, _locked: bool, _response: int):
 	lobby_id = lobby
+<<<<<<< HEAD
 	print("lobby (%s) joined" % lobby_id)
+=======
+	print("lobby joined bruh")
+	print(lobby_id)
+>>>>>>> refs/remotes/origin/main
 	print(Steam.getNumLobbyMembers(lobby_id))
 
 func _on_player_disconnected(disconnect_steam_id: int) -> void:
@@ -38,7 +43,11 @@ func join_lobby(this_lobby_id: int, _this_steam_id: int) -> void:
 	Steam.joinLobby(this_lobby_id)
 
 func _on_lobby_chat_update(this_lobby_id: int, _changed_id: int, making_change_id: int, chat_state: int) -> void:
+<<<<<<< HEAD
 	if chat_state == Steam.CHAT_MEMBER_STATE_CHANGE_ENTERED:
+=======
+	if chat_state == 1:
+>>>>>>> refs/remotes/origin/main
 		Steam.getPlayerAvatar(2, making_change_id)
 		Steam.avatar_loaded.connect(func load_avatars(_avatar_id: int, size: int, data: PackedByteArray) -> void: #inline function
 			var steam_image: Image = Image.create_from_data(size, size, false,Image.FORMAT_RGBA8, data)
@@ -47,9 +56,13 @@ func _on_lobby_chat_update(this_lobby_id: int, _changed_id: int, making_change_i
 			lobby_data.append({"number": len(lobby_data)+1, "steam_id": making_change_id, "steam_username": Steam.getFriendPersonaName(making_change_id), "steam_image_texture": temporary_image})) #ugly way to get avatar and will probably bite me in the ass later but whatever
 	elif chat_state == Steam.CHAT_MEMBER_STATE_CHANGE_DISCONNECTED:
 		lobby_data.erase({"number": len(lobby_data)+1, "steam_id": making_change_id, "steam_username": Steam.getFriendPersonaName(making_change_id), "steam_image_texture": null})
+<<<<<<< HEAD
 	elif chat_state == Steam.CHAT_MEMBER_STATE_CHANGE_LEFT:
 		lobby_data.erase({"number": len(lobby_data)+1, "steam_id": making_change_id, "steam_username": Steam.getFriendPersonaName(making_change_id), "steam_image_texture": null})
 	
+=======
+	print(Steam.getNumLobbyMembers(this_lobby_id))
+>>>>>>> refs/remotes/origin/main
 
 func set_user_variables() -> void:
 	steam_id = Steam.getSteamID()
