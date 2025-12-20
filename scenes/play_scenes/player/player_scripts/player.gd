@@ -6,7 +6,7 @@ var Bullet : PackedScene = preload("res://scenes/bullet.tscn")
 const SPEED = 300
 var pistol_in_hand = false
 var player_sprite = preload("res://resources/textures/sprites/idle.png")
-var player_pistol_sprite = preload("res://images/icon.jpg")
+var player_pistol_sprite = preload("res://resources/textures/sprites/pistol.png")
 
 func _physics_process(delta: float) -> void:
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
