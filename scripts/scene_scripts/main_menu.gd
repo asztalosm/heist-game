@@ -27,6 +27,7 @@ func _on_create_lobby() -> void:
 
 func _on_button_2_pressed() -> void:
 	print(Steamworks.lobby_data, " lobby id: ", Steamworks.lobby_id)
+	print(Steam.getNumLobbyMembers(Steamworks.lobby_id))
 
 
 func _on_timer_timeout() -> void:
