@@ -10,11 +10,11 @@ func save():
 	config.set_value("cash", "value", Marshalls.utf8_to_base64(str(game_controller.player_cash)))
 	config.set_value("position_x", "coordinates", Marshalls.utf8_to_base64(str(player.position.x)))
 	config.set_value("position_y", "coordinates", Marshalls.utf8_to_base64(str(player.position.y)))
-	config.save("res://savegame.cfg")
+	config.save("user://savegame.cfg")
 
 
 func load_save():
-	if config.load("res://savegame.cfg") != OK:
+	if config.load("user://savegame.cfg") != OK:
 		return
 
 	var cash_b64 = config.get_value("cash", "value", "")
