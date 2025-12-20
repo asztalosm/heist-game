@@ -1,10 +1,10 @@
 [gd_scene load_steps=10 format=4 uid="uid://dqw8ojndtnfur"]
 
 [ext_resource type="Script" uid="uid://bmxqkhjtp6og3" path="res://scenes/play_scenes/game_scripts.gd" id="1_cknrc"]
-[ext_resource type="Script" uid="uid://ccqhsllem52ki" path="res://scenes/characters/collectibles/cash/cash_scripts/cash_display.gd" id="1_dd6eb"]
+[ext_resource type="Script" uid="uid://ccqhsllem52ki" path="res://scenes/objects/collectibles/cash/cash_scripts/cash_display.gd" id="1_dd6eb"]
 [ext_resource type="Texture2D" uid="uid://bnls3bxcwkwca" path="res://resources/textures/tilesets/building_1.png" id="1_jjcd2"]
 [ext_resource type="Texture2D" uid="uid://bis5lwu5yalci" path="res://icon.svg" id="2_55jmh"]
-[ext_resource type="PackedScene" uid="uid://jbbww5p2qifr" path="res://scenes/characters/collectibles/cash/cash.tscn" id="3_6isf2"]
+[ext_resource type="PackedScene" uid="uid://jbbww5p2qifr" path="res://scenes/objects/collectibles/cash/cash.tscn" id="3_6isf2"]
 [ext_resource type="PackedScene" uid="uid://dy8mnquuvhpwr" path="res://scenes/play_scenes/player/player.tscn" id="4_jjcd2"]
 [ext_resource type="Script" uid="uid://b411761gpysg7" path="res://scenes/play_scenes/save_game.gd" id="5_7d57e"]
 

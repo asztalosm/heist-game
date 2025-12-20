@@ -2,7 +2,7 @@ class_name Player extends CharacterBody2D
 
 @onready var player = $"."
 @onready var sprite = $Sprite2D
-var Bullet : PackedScene = preload("res://scenes/bullet.tscn")
+var Bullet : PackedScene = preload("res://scenes/objects/bullet.tscn")
 const SPEED = 300
 var pistol_in_hand = false
 var player_sprite = preload("res://resources/textures/sprites/idle.png")
@@ -10,11 +10,7 @@ var player_pistol_sprite = preload("res://resources/textures/sprites/pistol.png"
 
 func _physics_process(delta: float) -> void:
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	if direction:
-		velocity = direction.rotated((get_global_mouse_position() - global_position).angle() + 0.5 * PI) * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.y = move_toward(velocity.y, 0, SPEED)
+	velocity = direction * SPEED
 	rotate(get_angle_to(get_global_mouse_position()) + 0.5 * PI)
 	move_and_slide()
 
@@ -31,6 +27,6 @@ func _input(event: InputEvent) -> void:
 
 func fire():
 	if pistol_in_hand == true:
-		var b = Bullet.instantiate()
-		owner.add_child(b)
-		b.transform = $Muzzle.global_transform
+		var bullet = Bullet.instantiate()
+		owner.add_child(bullet)
+		bullet.transform = $Muzzle.global_transform

@@ -15,8 +15,10 @@ var temporary_image: ImageTexture
 func _process(_delta: float) -> void:
 	Steam.run_callbacks()
 
-func _on_lobby_joined(_lobby: int, _permissions: int, _locked: bool, _response: int):
-	print("somebody joined the lobby")
+func _on_lobby_joined(lobby: int, _permissions: int, _locked: bool, _response: int):
+	lobby_id = lobby
+	print("lobby (%s) joined" % lobby_id)
+	print(Steam.getNumLobbyMembers(lobby_id))
 
 func _on_player_disconnected(disconnect_steam_id: int) -> void:
 	print(disconnect_steam_id, " disconnected")
@@ -35,16 +37,19 @@ func create_lobby() -> void:
 func join_lobby(this_lobby_id: int, _this_steam_id: int) -> void:
 	Steam.joinLobby(this_lobby_id)
 
-func _on_lobby_chat_update(_this_lobby_id: int, _changed_id: int, making_change_id: int, chat_state: int) -> void:
-	if chat_state == 1:
+func _on_lobby_chat_update(this_lobby_id: int, _changed_id: int, making_change_id: int, chat_state: int) -> void:
+	if chat_state == Steam.CHAT_MEMBER_STATE_CHANGE_ENTERED:
 		Steam.getPlayerAvatar(2, making_change_id)
 		Steam.avatar_loaded.connect(func load_avatars(_avatar_id: int, size: int, data: PackedByteArray) -> void: #inline function
 			var steam_image: Image = Image.create_from_data(size, size, false,Image.FORMAT_RGBA8, data)
 			steam_image.resize(48,48, Image.INTERPOLATE_LANCZOS)
 			temporary_image = ImageTexture.create_from_image(steam_image)
 			lobby_data.append({"number": len(lobby_data)+1, "steam_id": making_change_id, "steam_username": Steam.getFriendPersonaName(making_change_id), "steam_image_texture": temporary_image})) #ugly way to get avatar and will probably bite me in the ass later but whatever
-	elif chat_state == 2:
+	elif chat_state == Steam.CHAT_MEMBER_STATE_CHANGE_DISCONNECTED:
 		lobby_data.erase({"number": len(lobby_data)+1, "steam_id": making_change_id, "steam_username": Steam.getFriendPersonaName(making_change_id), "steam_image_texture": null})
+	elif chat_state == Steam.CHAT_MEMBER_STATE_CHANGE_LEFT:
+		lobby_data.erase({"number": len(lobby_data)+1, "steam_id": making_change_id, "steam_username": Steam.getFriendPersonaName(making_change_id), "steam_image_texture": null})
+	
 
 func set_user_variables() -> void:
 	steam_id = Steam.getSteamID()
