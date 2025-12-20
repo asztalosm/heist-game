@@ -17,3 +17,18 @@ func _on_play_button_2_pressed() -> void:
 
 func _no_steam_connection() -> void:
 	$Lobby.queue_free()
+
+func refresh_lobby_data() -> void:
+	print(Steamworks.lobby_data)
+
+func _on_create_lobby() -> void:
+	Steamworks.create_lobby()
+
+
+func _on_button_2_pressed() -> void:
+	print(Steamworks.lobby_data, " lobby id: ", Steamworks.lobby_id)
+
+
+func _on_timer_timeout() -> void:
+	for players in Steamworks.lobby_data:
+		get_node("Lobby/GridContainer").get_node(str(players.number)).texture = players.steam_image_texture
