@@ -15,7 +15,7 @@ texture = ExtResource("2_meayu")
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="Muzzle" type="Marker2D" parent="."]
-position = Vector2(0, -24)
+position = Vector2(0, -40)
 rotation = 4.712389
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

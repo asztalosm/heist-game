@@ -28,5 +28,5 @@ func _input(event: InputEvent) -> void:
 func fire():
 	if pistol_in_hand == true:
 		var bullet = Bullet.instantiate()
-		owner.add_child(bullet)
-		bullet.transform = $Muzzle.global_transform
+		get_tree().current_scene.add_child(bullet)
+		bullet.global_transform = $Muzzle.global_transform

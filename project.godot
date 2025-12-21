@@ -35,6 +35,11 @@ window/stretch/mode="viewport"
 
 enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
 
+[global_group]
+
+enemy="enemies"
+bullet=""
+
 [input]
 
 move_left={

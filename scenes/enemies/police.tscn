@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://1o8vxyin7tei"]
+
+[ext_resource type="Script" uid="uid://cstju3l4rf65s" path="res://scenes/enemies/police.gd" id="1_umgyc"]
+[ext_resource type="Texture2D" uid="uid://bis5lwu5yalci" path="res://icon.svg" id="2_327nu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_umgyc"]
+size = Vector2(128, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_327nu"]
+size = Vector2(128, 128)
+
+[node name="CharacterBody2D" type="CharacterBody2D" groups=["enemy"]]
+script = ExtResource("1_umgyc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_327nu")
+
+[node name="Area2D" type="Area2D" parent="." groups=["enemy"]]
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_umgyc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_327nu")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_left = -64.0
+offset_top = -104.0
+offset_right = 64.0
+offset_bottom = -77.0
+value = 100.0
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
