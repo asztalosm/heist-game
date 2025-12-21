@@ -19,17 +19,12 @@ func _process(_delta: float) -> void:
 func _on_lobby_joined(lobby: int, _permissions: int, _locked: bool, _response: int):
 	lobby_id = lobby
 	change_detected = true
+	get_lobby_data(lobby_id)
 
-func _on_player_disconnected(disconnect_steam_id: int) -> void:
-	print(disconnect_steam_id, " disconnected")
-	change_detected = true
 
 func _on_lobby_created(result:int, new_lobby_id: int) -> void:
 	if result == Steam.Result.RESULT_OK:
 		lobby_id = new_lobby_id
-		lobby_data.append({"number": 1, "steam_id": steam_id, "steam_username": steam_username, "steam_image_texture": steam_image_texture})
-	change_detected = true
-		
 
 
 func return_image_by_id(id):
@@ -46,8 +41,9 @@ func return_image_by_id(id):
 	
 func get_lobby_data(lobby: int):
 	change_detected = true
-	lobby_data = []
+	lobby_data.clear()
 	var member_count = Steam.getNumLobbyMembers(lobby)
+	print("lobby member count", member_count)
 	for i in range(member_count):
 		var member_id = Steam.getLobbyMemberByIndex(lobby, i)
 		lobby_data.append({
@@ -66,8 +62,8 @@ func join_lobby(this_lobby_id: int, _this_steam_id: int) -> void:
 	Steam.joinLobby(this_lobby_id)
 
 func _on_lobby_chat_update(this_lobby_id: int, _changed_id: int, _making_change_id: int, _chat_state: int) -> void:
+	print(_chat_state)
 	get_lobby_data(this_lobby_id)
-	change_detected = true
 
 func set_user_variables() -> void:
 	steam_id = Steam.getSteamID()

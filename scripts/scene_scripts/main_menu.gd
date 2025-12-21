@@ -22,7 +22,10 @@ func _on_create_lobby() -> void:
 
 func refresh_lobby() -> void:
 	if Steamworks.change_detected:
+		print("lobby length: ", len(Steamworks.lobby_data), "\n", Steamworks.lobby_data)
 		for players in Steamworks.lobby_data:
 			$Lobby/GridContainer.get_node(str(players.number)).texture = players.steam_image_texture
 			$Lobby/GridContainer.get_node(str(players.number)).tooltip_text = players.steam_username
+		for avatars in range(len(Steamworks.lobby_data)+1, 4):
+			$Lobby/GridContainer.get_node(str(avatars)).texture = load("res://resources/textures/sprites/missing_player.png")
 		Steamworks.change_detected = false
