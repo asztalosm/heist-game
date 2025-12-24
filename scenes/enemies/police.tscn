@@ -1,19 +1,24 @@
-[gd_scene load_steps=5 format=3 uid="uid://1o8vxyin7tei"]
+[gd_scene load_steps=6 format=3 uid="uid://1o8vxyin7tei"]
 
 [ext_resource type="Script" uid="uid://cstju3l4rf65s" path="res://scenes/enemies/police.gd" id="1_umgyc"]
-[ext_resource type="Texture2D" uid="uid://bis5lwu5yalci" path="res://icon.svg" id="2_327nu"]
+[ext_resource type="Texture2D" uid="uid://c7m3po4edi3xa" path="res://resources/textures/sprites/pistol.png" id="2_umgyc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_umgyc"]
-size = Vector2(128, 128)
+size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_327nu"]
-size = Vector2(128, 128)
+size = Vector2(24, 36)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_umgyc"]
+radius = 75.0
 
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["enemy"]]
+position = Vector2(39, 2)
 script = ExtResource("1_umgyc")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_327nu")
+scale = Vector2(0.9974452, 1)
+texture = ExtResource("2_umgyc")
 
 [node name="Area2D" type="Area2D" parent="." groups=["enemy"]]
 collision_layer = 2
@@ -26,10 +31,17 @@ shape = SubResource("RectangleShape2D_umgyc")
 shape = SubResource("RectangleShape2D_327nu")
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
-offset_left = -64.0
-offset_top = -104.0
-offset_right = 64.0
-offset_bottom = -77.0
+offset_left = -68.0
+offset_top = -59.999992
+offset_right = 60.0
+offset_bottom = -32.999992
 value = 100.0
 
+[node name="EnemyRadius" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyRadius"]
+shape = SubResource("CircleShape2D_umgyc")
+
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="body_entered" from="EnemyRadius" to="." method="_on_enemy_radius_body_entered"]
+[connection signal="body_exited" from="EnemyRadius" to="." method="_on_enemy_radius_body_exited"]

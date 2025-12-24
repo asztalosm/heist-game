@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://dqw8ojndtnfur"]
+[gd_scene load_steps=13 format=4 uid="uid://dqw8ojndtnfur"]
 
 [ext_resource type="Script" uid="uid://bmxqkhjtp6og3" path="res://scenes/play_scenes/game_scripts.gd" id="1_cknrc"]
 [ext_resource type="Script" uid="uid://ccqhsllem52ki" path="res://scenes/objects/collectibles/cash/cash_scripts/cash_display.gd" id="1_dd6eb"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://b411761gpysg7" path="res://scenes/play_scenes/save_game.gd" id="5_7d57e"]
 [ext_resource type="PackedScene" uid="uid://1o8vxyin7tei" path="res://scenes/enemies/police.tscn" id="8_60vd6"]
 [ext_resource type="PackedScene" uid="uid://bfimw42kgjd6" path="res://scenes/objects/bullet.tscn" id="9_n2ciq"]
+[ext_resource type="PackedScene" uid="uid://cg6alys78tngi" path="res://scenes/vault.tscn" id="11_nwo6n"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cknrc"]
 texture = ExtResource("1_jjcd2")
@@ -94,10 +95,13 @@ position = Vector2(112, 208)
 position = Vector2(576, 464)
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("8_60vd6")]
-position = Vector2(664, 104)
+position = Vector2(640, 136)
 
 [node name="CharacterBody2D2" parent="." instance=ExtResource("8_60vd6")]
-position = Vector2(480, 104)
+position = Vector2(328, 136)
+
+[node name="Vault" parent="." instance=ExtResource("11_nwo6n")]
+position = Vector2(552, 224)
 
 [connection signal="pressed" from="CanvasLayer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/SaveGame" to="CanvasLayer/SaveGame" method="save"]
