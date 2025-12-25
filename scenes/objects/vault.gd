@@ -41,7 +41,7 @@ func _on_timer_timeout():
 		for i in range(0, 10):
 			var cash = money.instantiate()
 			var angle = randf() * TAU
-			var distance = randf_range(50, 70)
+			var distance = randf_range(60, 80)
 			var offset = Vector2(cos(angle), sin(angle)) * distance
 			get_tree().current_scene.add_child(cash)
 			cash.global_position = global_position + offset

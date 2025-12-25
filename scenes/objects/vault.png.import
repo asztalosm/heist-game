@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cfk7doyntkqlp"
-path="res://.godot/imported/vault.png-901749fd2c84014499e5bea11a66e6c2.ctex"
+path="res://.godot/imported/vault.png-184584ca487102eb3c17d3825fbe4e9b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/vault.png"
-dest_files=["res://.godot/imported/vault.png-901749fd2c84014499e5bea11a66e6c2.ctex"]
+source_file="res://scenes/objects/vault.png"
+dest_files=["res://.godot/imported/vault.png-184584ca487102eb3c17d3825fbe4e9b.ctex"]
 
 [params]
 
