@@ -9,7 +9,7 @@ func _on_exit_button_pressed() -> void:
 
 func _on_play_button_2_pressed() -> void:
 	#temporary button, only used for me to work on the lobby stuff
-	get_tree().change_scene_to_file("res://scenes/play_scenes/multiplayer_test/lobby_selector.tscn")
+	get_tree().change_scene_to_file("res://scenes/play_scenes/multiplayer_test/game_lobby.tscn")
 
 func _no_steam_connection() -> void:
 	$Lobby.queue_free()
@@ -28,4 +28,11 @@ func refresh_lobby() -> void:
 			$Lobby/GridContainer.get_node(str(players.number)).tooltip_text = players.steam_username
 		for avatars in range(len(Steamworks.lobby_data)+1, 4):
 			$Lobby/GridContainer.get_node(str(avatars)).texture = load("res://resources/textures/sprites/missing_player.png")
+#		if Steamworks.lobby_data == []:
+#			$Lobby/GridContainer.get_node("1").texture = load("res://resources/textures/sprites/missing_player.png")
 		Steamworks.change_detected = false
+
+
+func _on_leave_lobby() -> void:
+	Steamworks.leave_lobby()
+	refresh_lobby()

@@ -5,11 +5,9 @@ var steam_id = 0
 var steam_username = null
 var lobby_id = 0
 var steam_initialized = false
-var menu_scene
 var steam_image_texture: ImageTexture
 var lobby_data = []
 var lobby_created = false
-var peer
 var temporary_image: ImageTexture
 var change_detected = false
 
@@ -18,7 +16,6 @@ func _process(_delta: float) -> void:
 
 func _on_lobby_joined(lobby: int, _permissions: int, _locked: bool, _response: int):
 	lobby_id = lobby
-	change_detected = true
 	get_lobby_data(lobby_id)
 
 
@@ -40,7 +37,6 @@ func return_image_by_id(id):
 	return temporary_image
 	
 func get_lobby_data(lobby: int):
-	change_detected = true
 	lobby_data.clear()
 	var member_count = Steam.getNumLobbyMembers(lobby)
 	print("lobby member count", member_count)
@@ -52,6 +48,7 @@ func get_lobby_data(lobby: int):
 			"steam_username": Steam.getFriendPersonaName(member_id),
 			"steam_image_texture": await return_image_by_id(member_id) #hopefully this doesnt leak memory or some shit cause its so hacky, might do a hashmap for this tho
 		})
+	change_detected = true
 	return str("\nLobby player count: {count}\nLobby players data {data}").format({"count": member_count, "data": lobby_data})
 
 func create_lobby() -> void:
@@ -60,6 +57,11 @@ func create_lobby() -> void:
 
 func join_lobby(this_lobby_id: int, _this_steam_id: int) -> void:
 	Steam.joinLobby(this_lobby_id)
+
+func leave_lobby() -> void:
+	Steam.leaveLobby(lobby_id)
+	lobby_data = []
+	change_detected = true
 
 func _on_lobby_chat_update(this_lobby_id: int, _changed_id: int, _making_change_id: int, _chat_state: int) -> void:
 	print(_chat_state)
