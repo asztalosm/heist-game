@@ -8,12 +8,17 @@ var pistol_in_hand = false
 var player_sprite = preload("res://resources/textures/sprites/idle.png")
 var player_pistol_sprite = preload("res://resources/textures/sprites/pistol.png")
 
+func gui_update() -> void:
+	$PlayerGUI/TextureProgressBar.value = GameController.player_health
+
+
 func _physics_process(delta: float) -> void:
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = direction * SPEED
 	rotate(get_angle_to(get_global_mouse_position()) + 0.5 * PI)
 	move_and_slide()
-	
+	gui_update()
+
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("switch_to_pistol"):
 		if pistol_in_hand == false:

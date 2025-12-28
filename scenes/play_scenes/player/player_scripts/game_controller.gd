@@ -10,3 +10,4 @@ func cash_collected(value: int):
 func take_damage(value: int):
 	player_health -= value
 	EventController.emit_signal("health_changed", player_health)
+	#ez majd később multiplayernél seggbe fog harapni szerintem de reméljük hogy nem
