@@ -10,6 +10,8 @@ var lobby_data = []
 var lobby_created = false
 var temporary_image: ImageTexture
 var change_detected = false
+var is_host = false
+var peer
 
 func _process(_delta: float) -> void:
 	Steam.run_callbacks()
@@ -22,6 +24,7 @@ func _on_lobby_joined(lobby: int, _permissions: int, _locked: bool, _response: i
 func _on_lobby_created(result:int, new_lobby_id: int) -> void:
 	if result == Steam.Result.RESULT_OK:
 		lobby_id = new_lobby_id
+		is_host = true
 
 
 func return_image_by_id(id):
@@ -87,6 +90,7 @@ func _ready() -> void:
 	var response = Steam.steamInitEx(480)
 	if response.status == 0:
 		print("steam connected succesfully")
+		Steam.initRelayNetworkAccess()
 		set_user_variables()
 	else:
 		push_error("Steam couldn't connect succesfully - ", response)
